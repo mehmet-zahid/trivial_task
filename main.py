@@ -37,7 +37,7 @@ async def demo_post(inp: Msg, background_tasks: BackgroundTasks):
 APP_PORT = os.getenv('APP_PORT')
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=int(APP_PORT if APP_PORT else '5000'))
+    uvicorn.run(app, host="0.0.0.0", port=int(APP_PORT if APP_PORT else '8000'))
     
 
 

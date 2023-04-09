@@ -12,4 +12,6 @@ services:
       - APP_ENV=DEV
     ports:
       - '${HOST_PORT_DEV}:${APP_PORT}'
-    command: "python3 main.py"
+    stdin_open: true
+    tty: true
+    command: "/bin/bash python3 main.py"

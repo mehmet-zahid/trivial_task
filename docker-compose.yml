@@ -12,4 +12,6 @@ services:
       - APP_ENV=PROD
     ports:
       - '${HOST_PORT_PROD}:${APP_PORT}'
+    stdin_open: true
+    tty: true
 
