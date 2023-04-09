@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+
+  fastapisel:
+    container_name: fastapisel
+    image: fastapisel
+    build: .
+    env_file:
+      - .env
+    environment:
+      - APP_ENV=PROD
+    ports:
+      - '${HOST_PORT_PROD}:${APP_PORT}'
+
