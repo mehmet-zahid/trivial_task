@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Submitted URLs</title>
+    <style>
+      .valid-urls {
+        color: green;
+      }
+
+      .invalid-urls {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Submitted URLs</h1>
+    {% if valid_urls %}
+      <h2>Valid URLs:</h2>
+      <ul class="valid-urls">
+        {% for url in valid_urls %}
+          <li>{{ url }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% if invalid_urls %}
+      <h2>Invalid URLs:</h2>
+      <ul class="invalid-urls">
+        {% for url in invalid_urls %}
+          <li>{{ url }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </body>
+</html>

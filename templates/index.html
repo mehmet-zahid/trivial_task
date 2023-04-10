@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>URL Submission</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+  </head>
+  <body>
+    <h1>Submit a URL</h1>
+    <form method="post" name="urls-form">
+        <div class="textarea-container">
+            <textarea class="text-area" name="urls" placeholder="Enter one or more URLs, one per line" rows="10" wrap="off" required></textarea>
+            <button class="submit-button" type="submit">Submit</button>
+          </div>
+      </form> 
+  </body>
+</html>

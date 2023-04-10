@@ -1,3 +1,8 @@
 fastapi[all]
 webdriver_manager
 selenium
+requests-html
+bs4
+aiohttp
+Pillow
+

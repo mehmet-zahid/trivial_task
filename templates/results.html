@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>URL Test Results</title>
+    <style>
+      table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>URL Test Results</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>URL</th>
+          <th>Test Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for result in url_results %}
+        {% for url, result in result.items() %}
+        <tr>
+          <td>{{ url }}</td>
+          <td>{{ result }}</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

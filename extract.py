@@ -2,6 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import os
+from requests_html import AsyncHTMLSession, HTML
+from bs4 import BeautifulSoup
+
 
 driver_path = os.path.join(os.getcwd(), "chromedriver")
 
@@ -28,3 +31,23 @@ def doBackgroundTask(inp):
     print("Doing background task")
     print(inp.msg)
     print("Done")
+
+
+async def check_urls(urls: list) -> dict:
+    results = {}
+    asession = AsyncHTMLSession()
+    
+    for url in urls:
+        try:
+            response = await asession.get(url)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, 'html.parser')
+            title = soup.title.string
+            results[url] = {"status": "success", "title": title}
+            
+        except Exception as e:
+            results[url] = {"status": "failed", "error": str(e)}
+    
+    return results
+    
+        
