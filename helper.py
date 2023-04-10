@@ -160,5 +160,4 @@ async def test_url(urls: List[str]) -> List[dict]:
                 print(e)
             
             results.append(res)
-    print(results)
     return results

@@ -3,17 +3,19 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities    
 import os
+import time
 from requests_html import AsyncHTMLSession, HTML
 from bs4 import BeautifulSoup
-import re
+import requests
 from helper import validate_url
 
 class NotPassedTest(Exception):
     pass
-driver_path = os.path.join(os.getcwd(), "chromedriver")
+#driver_path = os.path.join(os.getcwd(), "chromedriver")
 
 def createDriver() -> webdriver.Chrome:
     chrome_options = webdriver.ChromeOptions()
@@ -37,16 +39,20 @@ def test_url(urls):
     driver = createDriver()
 
     for url in urls:
-        res = {"url": url, "PASS": True, "message": []}
+        res = {"url": url, "PASS": True, "message": [], "description": ""}
         if not validate_url(url):
             res['message'].append("INVALID_URL")
-            #res['description'] = "Invalid URL format"
+            res['description'] = "Invalid URL format"
             res['PASS'] = False
             
 
         try:
-            res = driver.get(url)
-            print(res)
+            driver.get(url)
+            if requests.get(driver.current_url).status_code != 200:
+                res['message'].append("INVALID_RESPONSE_CODE")
+                res['description'] = "response status code not 200"
+                res['PASS'] = False
+                raise NotPassedTest("INVALID_RESPONSE")
             
             
             wait = WebDriverWait(driver, 10)
@@ -69,15 +75,23 @@ def test_url(urls):
                     if img_size > 100_000:
                         res['message'].append("Images not high resolution")
                         break
-
+            
             # Test for javascript dropdown not working properly
-            js_dropdowns = driver.find_elements(by=By.XPATH, value="//select[contains(@class, 'dropdown') or contains(@class, 'select2')]")
+            js_dropdowns = driver.find_elements(by=By.TAG_NAME, value="select")
+            
             for dropdown in js_dropdowns:
-                if "disabled" not in dropdown.get_attribute("class"):
-                    dropdown_options = dropdown.find_elements(by=By.TAG_NAME, value="option")
-                    if len(dropdown_options) <= 1:
-                        res['message'].append("Javascript dropdown not working properly")
-                        break
+                sel = Select(dropdown) # select_by_index(1)
+                
+                if sel.options:
+                    for i, option in enumerate(sel.options):
+                        try:
+                            if option.is_enabled():
+                                print(sel.select_by_index(i))
+                                time.sleep(0.5)
+                        except Exception as e:
+                            print(e)                            
+                            res['message'].append("Not all dropdown working properly")
+                            break
         
         except Exception as e:
             res['message'].append("INVALID_REQUEST")
