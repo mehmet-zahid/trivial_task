@@ -51,4 +51,4 @@ RUN curl https://pyenv.run | bash && \
 #ENV PATH=/root/.pyenv/shims:$PATH
 #ENV PATH=/root/.pyenv/bin:$PATH
 
-CMD python3 app.py
+CMD /bin/bash python3 app.py

@@ -14,4 +14,4 @@ services:
       - '${HOST_PORT_DEV}:${APP_PORT}'
     stdin_open: true
     tty: true
-    command: "/bin/bash python3 main.py"
+    command: "/bin/bash python3 app.py"
