@@ -6,7 +6,7 @@ import aiohttp
 import re
 from bs4 import BeautifulSoup
 
-url_pattern = re.compile(r'^https?://[^\s/$.?#].[^\s]*$')
+url_pattern = re.compile(r'^(https?://)?[a-z0-9-]+(\.[a-z0-9-]+)+([/?].*)?$')
 
 class NotPassedTest(Exception):
     pass

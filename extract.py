@@ -9,6 +9,7 @@ import os
 from requests_html import AsyncHTMLSession, HTML
 from bs4 import BeautifulSoup
 import re
+from helper import validate_url
 
 class NotPassedTest(Exception):
     pass
@@ -37,14 +38,15 @@ def test_url(urls):
 
     for url in urls:
         res = {"url": url, "PASS": True, "message": []}
-        if not re.match(r"^https?://", url):
+        if not validate_url(url):
             res['message'].append("INVALID_URL")
             #res['description'] = "Invalid URL format"
-            #res['PASS'] = False
+            res['PASS'] = False
             
 
         try:
-            driver.get(url)
+            res = driver.get(url)
+            print(res)
             
             
             wait = WebDriverWait(driver, 10)
@@ -78,10 +80,10 @@ def test_url(urls):
                         break
         
         except Exception as e:
-                res['message'].append("INVALID_REQUEST")
-                res['description'] = "exception raised"
-                res['PASS'] = False
-                print(e)
+            res['message'].append("INVALID_REQUEST")
+            res['description'] = "exception raised"
+            res['PASS'] = False
+            print(e)
 
         results.append(res)
 
