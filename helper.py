@@ -96,7 +96,7 @@ async def test_url(urls: List[str]) -> List[dict]:
     results = []
     async with aiohttp.ClientSession() as session:
         for url in urls:
-            res: dict = {"url": url, "PASS": "True", "message": []}
+            res: dict = {"url": url, "PASS": True, "message": []}
             #if not validate_url(url):
             #    res['message'].append("INVALID_URL")
             #    res['description'] = "Invalid URL format"
@@ -109,7 +109,7 @@ async def test_url(urls: List[str]) -> List[dict]:
                     if response.status != 200:
                         res['message'].append("INVALID_RESPONSE")
                         #res['description'] = "status code not 200"
-                        res['PASS'] = "False"
+                        res['PASS'] = False
                         raise NotPassedTest("INVALID_RESPONSE")
                     
                     soup = BeautifulSoup(await response.content.read(), 'html.parser')
@@ -118,6 +118,17 @@ async def test_url(urls: List[str]) -> List[dict]:
                     lang_links = soup.find_all(href=re.compile("/translate"))
                     if lang_links:
                         res['message'].append("Inner pages not translated")
+
+                    # Find all links on the page
+                    links = soup.find_all('a')
+
+                    # Loop through all links and check if the href attribute contains 'hi'
+                    for link in links:
+                        href = link.get('href')
+                        if href:
+                            if not 'hi' in href:
+                                res['message'].append(f"The page {href} has not been translated to Hindi")
+                                break
 
                     # Test for images not high resolution
                     img_tags = soup.find_all("img")
@@ -139,13 +150,13 @@ async def test_url(urls: List[str]) -> List[dict]:
                                 raise NotPassedTest("Javascript dropdown not working properly")
                             
             except NotPassedTest as e:
-                res['PASS'] = "False"
+                res['PASS'] = False
                 print(e)
                                 
             except Exception as e:
                 res['note'] = ["INVALID_REQUEST"]
                 res['description'] = "exception raised"
-                res['PASS'] = "False"
+                res['PASS'] = False
                 print(e)
             
             results.append(res)
