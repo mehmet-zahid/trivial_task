@@ -4,8 +4,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import os
 from typing import List
-from helper import test_url
-#from extract import check_urls
+#from helper import test_url
+from extract import test_url
 
 
 app = FastAPI()
@@ -20,7 +20,7 @@ async def read_item(request: Request):
 @app.post("/")
 async def submit_url(request: Request, urls: str = Form(default="")):
     #valid_urls, invalid_urls = validate_urls(urls)
-    results_list = await test_url(urls.splitlines())
+    results_list = test_url(urls.splitlines())
     print(results_list)
     return templates.TemplateResponse("results2.html", {"request": request, "results_list": results_list})
     #return templates.TemplateResponse("url_validation.html", {"request": request, "valid_urls": valid_urls, "invalid_urls": invalid_urls})

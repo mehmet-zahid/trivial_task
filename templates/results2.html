@@ -41,7 +41,9 @@
 			{% else %}
 			<td style="color: red;">FAIL</td>
 			{% endif %}
-			<td>{% for message in res.message %}{{ message }}<br>{% endfor %}</td>
+			<td>{% for message in res.message %}
+				{{ message }}
+				{% endfor %}</td>
 		</tr>
 		{% endfor %}
 	</table>
